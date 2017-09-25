@@ -1,12 +1,12 @@
-# Add a declarative step here for populating the DB with movies.
+#Each/do loop: https://stackoverflow.com/questions/3294509/for-vs-each-in-ruby
+#Step: https://github.com/cucumber/cucumber/wiki/Calling-Steps-from-Step-Definitions
 
-#@count = 0
+# Add a declarative step here for populating the DB with movies.
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
     # each returned element will be a hash whose key is the table header.
     # you should arrange to add that movie to the database here.
     Movie.create!(movie)
-    #@count = @count + 1
   end
   #fail "Unimplemented"
 end
@@ -36,19 +36,20 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   #fail "Unimplemented"
   
   rating_list.split(",").each do |rating|
-    rating = "ratings_" + rating.strip
     if uncheck
-      uncheck(rating)
+      uncheck("ratings_" + rating)
     else
-      check(rating)
+      check("ratings_" + rating)
     end
   end
 end
 
+
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  #page.should have_css("table#movies tbody tr", :count => movies_count.to_i)
-  assert Movie.all.count == page.all("table#movies tbody tr").length
-
+  # Must have Movie.all in order to have all of the values and then iterate through the movies
+  Movie.all.each do |movie|
+    step %{I should see "#{movie.title}"}
+  end 
   #fail "Unimplemented"
 end
