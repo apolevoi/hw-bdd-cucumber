@@ -21,7 +21,7 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  assert page.body =~ /#{e1}.*#{e2}/m
+  match = /.*#{e1}.*#{e2}/m =~ page.body
   #fail "Unimplemented"
 end
 
